@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>为什么springboot项目不需要web.xml</title>
+      <link href="/2019/11/18/webXml/"/>
+      <url>/2019/11/18/webXml/</url>
+      
+        <content type="html"><![CDATA[<h1 id="为什么springboot项目不需要web-xml"><a href="#为什么springboot项目不需要web-xml" class="headerlink" title="为什么springboot项目不需要web.xml"></a>为什么springboot项目不需要web.xml</h1><p>我们都知道以前一个项目的前端入口就是通过web.xml去配置的，然而这种springboot中我们根本没发现web.xml这是为什么呢？</p><h1 id="servlet3-0-新特性"><a href="#servlet3-0-新特性" class="headerlink" title="servlet3.0 新特性"></a>servlet3.0 新特性</h1><p>首先我们来看servlet3.0 新特性 servlet3.0 提供了若干新特性用于简化 Web 应用的开发和部署。<font color="#DC143C">其中一项新特性便是提供了无 xml 配置的特性。</font><br>servlet3.0 首先提供了 @WebServlet，@WebFilter 等注解，这样便有了抛弃 web.xml 的第一个途径，凭借注解声明 servlet 和 filter 来做到这一点。<br>Spring3.0奠定了SpringBoot自动装配的基础。3.0提供的java注解使得我们可以通过注解的方式来配置spring容器。省去了使用类似于spring-context.xml的配置文件。</p><h1 id="servlet4-0开始全面支持java8-0"><a href="#servlet4-0开始全面支持java8-0" class="headerlink" title="servlet4.0开始全面支持java8.0"></a>servlet4.0开始全面支持java8.0</h1><p>4.0 时代我们甚至连xml配置文件都不需要了完全使用java源码级别的配置与spring提供的注解就能快速的开发spring应用程序,但仍然无法改变Java Web应用程序的运行模式,我们仍然需要将war部署到Web Server 上，才能对外提供服务。</p><p><font color="#DC143C">再直白一点来说，存在web.xml的时候，Servlet容器会根据web.xml中的配置初始化我们的jar包（也可以说web.xml是我们的jar包和Servlet联系的中介）。而在Servlet3.0容器初始化时会调用jar包META-INF/services/javax.servlet.ServletContainerInitializer中指定的类的实现（javax.servlet.ServletContainerInitializer中的实现替代了web.xml的作用，而所谓的在@HandlesTypes注解中指定的感兴趣的类，可以理解为具体实现了web.xml的功能，当然也可以有其他的用途）。图片如下</font><br>ServletContainerInitializer这个类会在web容器启动阶段被回调，可以在onStartup方法里做一些servlet、filter、listener的注册等操作。<br>web容器启动后，调用所有WebApplicationInitializer的onStartup方法。<br>一般使用Springboot的时候，都会继承一个类SpringBootServletInitializer，在这个类的onStartup方法中，启动了整个Spring容器。</p><p><img alt data-src="https://img2018.cnblogs.com/blog/1635748/201905/1635748-20190528214050392-481345805.png" class="lazyload"></p><p>容器启动时将自动扫描类路径以查找实现Spring的webapplicationinitializer接口的所有实现，将其放进一个Set集合中 如下</p><p><img alt data-src="/img/springbootFile/Servlet.png" class="lazyload"></p><h1 id="官方解释"><a href="#官方解释" class="headerlink" title="官方解释"></a>官方解释</h1><p>为了支持可以不使用web.xml。提供了ServletContainerInitializer，它可以通过SPI机制，当启动web容器的时候，会自动到添加的相应jar包下找到META-INF/services下以ServletContainerInitializer的全路径名称命名的文件，它的内容为ServletContainerInitializer实现类的全路径，将它们实例化</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> SpringBoot </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> SpringBoot </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>为什么springboot项目不需要xml配置之springbootApplication</title>
       <link href="/2019/11/15/springbootApplication/"/>
       <url>/2019/11/15/springbootApplication/</url>
